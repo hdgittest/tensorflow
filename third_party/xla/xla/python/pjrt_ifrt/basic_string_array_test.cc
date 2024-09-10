@@ -908,6 +908,9 @@ TEST(LayoutTest, FailsAfterDeletion) {
                       std::move(on_done_with_buffer)));
 
   array->Delete();
+
+  EXPECT_THAT(array->GetReadyFuture().Await(),
+              StatusIs(absl::StatusCode::kFailedPrecondition));
 }
 
 /////////////////////////////////////////////////////////////////////////////

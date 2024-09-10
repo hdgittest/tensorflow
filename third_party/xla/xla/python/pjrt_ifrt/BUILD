@@ -343,6 +343,148 @@ cc_library(
 )
 
 cc_library(
+    name = "pjrt_layout",
+    srcs = ["pjrt_layout.cc"],
+    hdrs = ["pjrt_layout.h"],
+    compatible_with = get_compatible_with_portable(),
+    deps = [
+        ":pjrt_dtype",
+        "//xla:shape_util",
+        "//xla/pjrt:pjrt_layout",
+        "//xla/python/ifrt",
+        "//xla/tsl/platform:errors",
+        "//xla/tsl/platform:statusor",
+        "@com_google_absl//absl/algorithm:container",
+        "@com_google_absl//absl/base:nullability",
+        "@com_google_absl//absl/hash",
+        "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/types:span",
+        "@llvm-project//llvm:Support",
+    ],
+)
+
+xla_cc_test(
+    name = "pjrt_layout_test",
+    srcs = ["pjrt_layout_test.cc"],
+    deps = [
+        ":pjrt_layout",
+        "//xla:shape_util",
+        "//xla/pjrt:pjrt_layout",
+        "//xla/python/ifrt",
+        "//xla/tsl/platform:status_matchers",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+tf_proto_library(
+    name = "pjrt_layout_serdes_proto",
+    srcs = ["pjrt_layout_serdes.proto"],
+    protodeps = ["//xla:xla_data_proto"],
+)
+
+cc_library(
+    name = "pjrt_layout_serdes",
+    srcs = ["pjrt_layout_serdes.cc"],
+    deps = [
+        ":pjrt_layout",
+        ":pjrt_layout_serdes_proto_cc",
+        "//xla:shape_util",
+        "//xla:xla_data_proto_cc",
+        "//xla/pjrt:pjrt_layout",
+        "//xla/python/ifrt:serdes",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings:string_view",
+        "@llvm-project//llvm:Support",
+    ],
+    alwayslink = True,
+)
+
+xla_cc_test(
+    name = "pjrt_layout_serdes_test",
+    srcs = ["pjrt_layout_serdes_test.cc"],
+    deps = [
+        ":pjrt_layout",
+        ":pjrt_layout_serdes",
+        "//xla:shape_util",
+        "//xla/pjrt:pjrt_layout",
+        "//xla/python/ifrt",
+        "//xla/python/ifrt:layout_test_util",
+        "//xla/python/ifrt:serdes",
+        "//xla/tsl/platform:statusor",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "basic_string_array_layout",
+    srcs = ["basic_string_array_layout.cc"],
+    hdrs = ["basic_string_array_layout.h"],
+    compatible_with = get_compatible_with_portable(),
+    deps = [
+        "//xla/python/ifrt",
+        "@com_google_absl//absl/base:nullability",
+        "@com_google_absl//absl/hash",
+        "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/strings:string_view",
+        "@llvm-project//llvm:Support",
+    ],
+)
+
+xla_cc_test(
+    name = "basic_string_array_layout_test",
+    srcs = ["basic_string_array_layout_test.cc"],
+    deps = [
+        ":basic_string_array_layout",
+        "//xla/python/ifrt",
+        "//xla/tsl/platform:status_matchers",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/strings:string_view",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+tf_proto_library(
+    name = "basic_string_array_layout_serdes_proto",
+    srcs = ["basic_string_array_layout_serdes.proto"],
+)
+
+cc_library(
+    name = "basic_string_array_layout_serdes",
+    srcs = ["basic_string_array_layout_serdes.cc"],
+    deps = [
+        ":basic_string_array_layout",
+        ":basic_string_array_layout_serdes_proto_cc",
+        "//xla/python/ifrt:serdes",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings:string_view",
+        "@llvm-project//llvm:Support",
+    ],
+    alwayslink = True,
+)
+
+xla_cc_test(
+    name = "basic_string_array_layout_serdes_test",
+    srcs = ["basic_string_array_layout_serdes_test.cc"],
+    deps = [
+        ":basic_string_array_layout",
+        ":basic_string_array_layout_serdes",
+        "//xla/python/ifrt",
+        "//xla/python/ifrt:layout_test_util",
+        "//xla/python/ifrt:serdes",
+        "//xla/tsl/platform:statusor",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_library(
     name = "basic_string_array",
     srcs = ["basic_string_array.cc"],
     hdrs = ["basic_string_array.h"],
