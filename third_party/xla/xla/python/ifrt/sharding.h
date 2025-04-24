@@ -36,7 +36,6 @@ limitations under the License.
 #include "xla/python/ifrt/serdes.h"
 #include "xla/python/ifrt/shape.h"
 #include "xla/python/ifrt/sharding.pb.h"
-#include "xla/tsl/concurrency/ref_count.h"
 
 namespace xla {
 namespace ifrt {
@@ -563,8 +562,8 @@ class ShardingParamSharding
   ShardingParam sharding_param_;
 };
 
-// Options for deserializing shardings. Function referenced by `lookup_device`
-// must remain valid during deserialization.
+// Options for deserializing shardings. `client` must remain valid during
+// deserialization.
 struct DeserializeShardingOptions
     : llvm::RTTIExtends<DeserializeShardingOptions, DeserializeOptions> {
   explicit DeserializeShardingOptions(Client* client) : client(client) {}
