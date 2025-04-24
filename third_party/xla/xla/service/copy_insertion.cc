@@ -2381,6 +2381,9 @@ absl::Status CopyInsertion::AddSpecialCaseCopies(
   // cannot be done in place. Such aliasing can be created when some copies are
   // removed too aggressively by CopyRemoval.
   for (const HloValue* value : alias_analysis->dataflow_analysis().values()) {
+    if (value->defining_instruction()->IsFused()) {
+      continue;
+    }
     HloBuffer& buffer = alias_analysis->GetBufferContainingValue(*value);
     if (buffer.values().size() > 1 && ValueIsReadOnly(*value)) {
       VLOG(2) << "Value " << value->ToShortString()
@@ -2397,6 +2400,9 @@ absl::Status CopyInsertion::AddSpecialCaseCopies(
       }
       HloPosition position = value2->defining_position();
       for (const HloUse& use : value->GetUses()) {
+        if (use.instruction->IsFused()) {
+          continue;
+        }
         if (use.instruction == position.instruction) {
           VLOG(3) << "Same instruction: " << position.instruction->ToString();
           if (!alias_analysis->dataflow_analysis()
