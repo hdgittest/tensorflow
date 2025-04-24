@@ -101,6 +101,17 @@ cc_library(
 )
 
 cc_library(
+    name = "common_pjrt_client",
+    srcs = ["common_pjrt_client.cc"],
+    hdrs = ["common_pjrt_client.h"],
+    deps = [
+        ":device_event",
+        ":pjrt_client",
+        ":raw_buffer",
+    ],
+)
+
+cc_library(
     name = "tracked_device_buffer",
     srcs = ["tracked_device_buffer.cc"],
     hdrs = ["tracked_device_buffer.h"],
@@ -1146,9 +1157,13 @@ cc_library(
     hdrs = ["device_event.h"],
     deps = [
         ":pjrt_future",
+        "//xla/tsl/concurrency:async_value",
         "//xla/tsl/concurrency:ref_count",
+        "@com_google_absl//absl/functional:any_invocable",
+        "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/types:span",
     ],
 )
 
